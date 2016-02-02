@@ -1,0 +1,85 @@
+{% load staticfiles %}
+<html>
+<link type="text/css" rel="stylesheet" href="{% static 'css/annotorious.css' %}" />
+<script type="text/javascript" src="{% static 'jquery-2.2.0.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'annotorious.min.js' %}"></script>
+{% if polygon %}
+<script type="text/javascript" src="{% static 'anno-polygon.min.js' %}"></script>
+{% endif %}
+<script type="text/javascript">
+jQuery.noConflict();
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+jQuery.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+function update (method, annotation) {
+	jQuery.ajax({
+		url:"log",
+		type:"POST",
+		data: JSON.stringify({method: method, annotation: annotation}),
+		success: function(response){},
+		complete: function() {},
+		error: function (xhr, textStatus, thrownError) {
+			alert("error");
+		}
+	});
+}
+{% if polygon %}
+anno.addPlugin('PolygonSelector', { activate: true });
+{% endif %}
+anno.addHandler("onAnnotationCreated", function(annotation) {
+	update("create", annotation);
+});
+anno.addHandler("onAnnotationRemoved", function(annotation) {
+	update("remove", annotation);
+});
+anno.addHandler("onAnnotationUpdated", function(annotation) {
+	update("update", annotation);
+});
+</script>
+<body>
+Total: {{total}}, Done: {{done}}, Todo: {{todo}}
+<br/>
+<form>
+{% csrf_token %}
+<table>
+{% for row in jobs %}
+<tr>
+{% for col in row %}
+<td>{{col}}<img src="{% url 'image' col %}" key="{{col}}" class="annotatable"/></td>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+</form>
+<script type="text/javascript">
+{% for a in annos %}
+anno.addAnnotation({{a | safe}});
+{% endfor %}
+</script>
+</body>
+</html>
+
