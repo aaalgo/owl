@@ -65,7 +65,7 @@ Total: {{total}}, Done: {{done}}, Todo: {{todo}}
 <br/>
 <form>
 {% csrf_token %}
-<table>
+<table border="2">
 {% for row in jobs %}
 <tr>
 {% for col in row %}
