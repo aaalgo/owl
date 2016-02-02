@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
+from django.core.urlresolvers import reverse
 from models import *
 import params
 
@@ -25,28 +26,45 @@ def image (request, key):
     data = open(image.path, 'r').read()
     return HttpResponse(data, content_type = mime)
 
-def anno (request):
-    template = loader.get_template('annotate/test.html')
-    todo = []
+def fix_anno (txt):
+    x = json.loads(txt)
+    del x['context']
+    key = x['key']
+    del x['key']
+    x['src'] = reverse('image', args=[key])
+    return json.dumps(x)
+
+def anno_base (request, images):
     n_total = Image.objects.count()
     n_done = Image.objects.filter(done = True).count()
-    for trial in range(2):
-        found = Image.objects.filter(done = False, viewed = False).order_by('id')[:params.BATCH]
-        todo = [x.id for x in found]
-        Image.objects.filter(pk__in = found).update(viewed = True)
-        if len(todo) > 0 or trial > 0:
-            break
-        # if we have viewed everything, then restart
-        Image.objects.filter(done = False, viewed = True).update(viewed = False)
-        pass
+    annotations = Annotation.objects.filter(deleted = False, image__in = images)
+    todo = [x.id for x in images]
+    annos = [fix_anno(x.anno) for x in annotations]
     context = {'jobs': list(chunks(todo, params.COLS)),
                'polygon': params.POLYGON,
                'total': n_total,
                'done': n_done,
-               'todo': n_total - n_done
+               'todo': n_total - n_done,
+               'annos': annos,
               }
-    print todo
-    return render(request, 'annotate/test.html', context)
+    return render(request, 'annotate/anno.html', context)
+
+def anno (request):
+    images = []
+    for trial in range(2):
+        images = Image.objects.filter(done = False, viewed = False).order_by('id')[:params.BATCH]
+        if len(images) > 0 or trial > 0:
+            break
+        # if we have viewed everything, then restart
+        Image.objects.filter(done = False, viewed = True).update(viewed = False)
+        pass
+    R = anno_base(request, images)
+    Image.objects.filter(pk__in = images).update(viewed = True)
+    return R
+
+def review (request, key):
+    images = Image.objects.filter(pk = int(key))
+    return anno_base(request, images)
 
 METHOD_MAP = {key: value for (value, key) in Log.METHOD_CHOICES}
 
@@ -57,23 +75,25 @@ def log (request):
     method = METHOD_MAP.get(data['method'].upper(), -1)
     assert method >= 0
     anno = data['annotation']
+    print method, anno
     key = int(anno["key"])
     image = Image.objects.get(pk = key)
     sig = signature(image, anno)
+    anno_json = json.dumps(anno)
     log = Log.objects.create(image = image,
                              method = method,
-                             anno = anno,
+                             anno = anno_json,
                              ip_address = request.META.get('REMOTE_ADDR'))
     if method == Log.CREATE:
         Annotation.objects.create(signature = sig, 
                                   image = image,
-                                  anno = anno,
+                                  anno = anno_json,
                                   log = log)
         image.done = True
         image.save()
     elif method == Log.UPDATE:
         r = Annotation.objects.get(pk = sig)
-        r.anno = anno
+        r.anno = anno_json
         r.log = log
         r.save()
     elif method == Log.DELETE:
@@ -83,7 +103,6 @@ def log (request):
         r.save()
     else:
         assert False
-    print method, anno
     return HttpResponse(json.dumps({}), content_type="application/json")
 
 
