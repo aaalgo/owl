@@ -1,0 +1,3 @@
+[submodule "annotorious"]
+	path = annotorious
+	url = https://github.com/aaalgo/annotorious.git

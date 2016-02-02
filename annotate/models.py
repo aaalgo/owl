@@ -11,8 +11,9 @@ class Image (models.Model):
     path = models.CharField(max_length=500)
     status = models.IntegerField(choices=STATUS_CHOICES, default=INIT)
 
-
 class Annotation (models.Model):
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
+    signature = model.CharField(
+    
     text = models.TextField()
 
