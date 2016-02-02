@@ -1,0 +1,4 @@
+ROWS = 3
+COLS = 5
+BATCH = ROWS * COLS
+POLYGON = False
