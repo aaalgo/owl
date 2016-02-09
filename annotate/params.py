@@ -1,4 +1,4 @@
-ROWS = 3
-COLS = 5
+ROWS = 5
+COLS = 3
 BATCH = ROWS * COLS
 POLYGON = False
