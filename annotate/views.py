@@ -36,7 +36,10 @@ def fix_anno (txt):
 
 def anno_base (request, images):
     n_total = Image.objects.count()
-    n_done = Image.objects.filter(done = True).count()
+    if params.VIEWED_AS_DONE:
+        n_done = Image.objects.filter(viewed = True).count()
+    else:
+        n_done = Image.objects.filter(done = True).count()
     annotations = Annotation.objects.filter(deleted = False, image__in = images)
     todo = [x.id for x in images]
     annos = [fix_anno(x.anno) for x in annotations]
@@ -53,7 +56,7 @@ def anno (request):
     images = []
     for trial in range(2):
         images = Image.objects.filter(done = False, viewed = False).order_by('id')[:params.BATCH]
-        if len(images) > 0 or trial > 0:
+        if params.VIEWED_AS_DONE or len(images) > 0 or trial > 0:
             break
         # if we have viewed everything, then restart
         Image.objects.filter(done = False, viewed = True).update(viewed = False)

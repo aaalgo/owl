@@ -2,3 +2,4 @@ ROWS = 5
 COLS = 3
 BATCH = ROWS * COLS
 POLYGON = False
+VIEWED_AS_DONE = False
