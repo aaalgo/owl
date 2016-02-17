@@ -29,8 +29,9 @@ def image (request, key):
 def fix_anno (txt):
     x = json.loads(txt)
     del x['context']
+    del x['shapes'][0]['style']
     key = x['key']
-    del x['key']
+    #del x['key']
     x['src'] = reverse('image', args=[key])
     return json.dumps(x)
 
@@ -101,9 +102,7 @@ def log (request):
         r.save()
     elif method == Log.DELETE:
         r = Annotation.objects.get(pk = sig)
-        r.deleted = True
-        r.log = log
-        r.save()
+        r.delete()
     else:
         assert False
     return HttpResponse(json.dumps({}), content_type="application/json")

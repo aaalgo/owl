@@ -36,28 +36,28 @@ jQuery.ajaxSetup({
     }
 });
 function update (method, annotation) {
-	jQuery.ajax({
-		url:"log",
-		type:"POST",
-		data: JSON.stringify({method: method, annotation: annotation}),
-		success: function(response){},
-		complete: function() {},
-		error: function (xhr, textStatus, thrownError) {
-			alert("error");
-		}
-	});
+    jQuery.ajax({
+        url:"{% url 'log' %}",
+        type:"POST",
+        data: JSON.stringify({method: method, annotation: annotation}),
+        success: function(response){},
+        complete: function() {},
+        error: function (xhr, textStatus, thrownError) {
+            alert("error");
+        }
+    });
 }
 {% if polygon %}
 anno.addPlugin('PolygonSelector', { activate: true });
 {% endif %}
 anno.addHandler("onAnnotationCreated", function(annotation) {
-	update("create", annotation);
+    update("create", annotation);
 });
 anno.addHandler("onAnnotationRemoved", function(annotation) {
-	update("delete", annotation);
+    update("delete", annotation);
 });
 anno.addHandler("onAnnotationUpdated", function(annotation) {
-	update("update", annotation);
+    update("update", annotation);
 });
 </script>
 <body>
@@ -76,9 +76,22 @@ Total: {{total}}, Done: {{done}}, Todo: {{todo}}
 </table>
 </form>
 <script type="text/javascript">
-{% for a in annos %}
-anno.addAnnotation({{a | safe}});
-{% endfor %}
+/*
+jQuery(document).ready(function() {
+        setTimeout(function() {
+            //anno.reset();
+            {% for a in annos %}
+            anno.addAnnotation({{a | safe}});
+            {% endfor %}
+            }, 300);
+        });
+        */
+jQuery(window).load(function() {
+            //anno.reset();
+            {% for a in annos %}
+            anno.addAnnotation({{a | safe}});
+            {% endfor %}
+            });
 </script>
 </body>
 </html>
