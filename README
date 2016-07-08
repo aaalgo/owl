@@ -1,0 +1,7 @@
+after clone
+
+1. ./manage.py migrate
+2. find images/ -type f  | sed 's/$/\tx/' | ./manage.py import --run
+3. ./manage.py run
+4. After labeling is done:
+   ./dump.sh
