@@ -69,7 +69,11 @@ Total: {{total}}, Done: {{done}}, Todo: {{todo}}
 {% for row in jobs %}
 <tr>
 {% for col in row %}
-<td>{{col}}<img src="{% url 'image' col %}" key="{{col}}" class="annotatable"/></td>
+<td>{{col}}<img src="{% url 'image' col %}" key="{{col}}" class="annotatable"/>
+	{% if show_check %}
+	<input type="checkbox" class='done'></input>
+	{% endif %}
+</td>
 {% endfor %}
 </tr>
 {% endfor %}
@@ -92,6 +96,9 @@ jQuery(window).load(function() {
             anno.addAnnotation({{a | safe}});
             {% endfor %}
             });
+jQuery('.done').on('change', function(e) {
+	alert(e);
+});
 </script>
 </body>
 </html>

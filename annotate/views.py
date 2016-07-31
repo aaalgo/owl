@@ -16,7 +16,11 @@ def chunks(l, n):
         yield l[i:i+n]
 
 def signature (image, annotation):
-    return str(image.id)
+    geo = annotation['shapes'][0]['geometry']
+    sig = '%s:%s' % (image.id, json.dumps(geo))
+    sig = sig[:250]
+    logging.info(sig)
+    return sig
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +54,7 @@ def anno_base (request, images):
                'done': n_done,
                'todo': n_total - n_done,
                'annos': annos,
+               'show_check': params.SHOW_CHECK,
               }
     return render(request, 'annotate/anno.html', context)
 

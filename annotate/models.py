@@ -22,7 +22,7 @@ class Log (models.Model):
     ip_address = models.GenericIPAddressField()
 
 class Annotation (models.Model):
-    signature = models.CharField(max_length=200, primary_key=True)
+    signature = models.CharField(max_length=250, primary_key=True)
     image = models.ForeignKey(Image, on_delete=models.CASCADE, null=False)
     anno = models.TextField()
     log = models.ForeignKey(Log, on_delete=models.SET_NULL, null=True)
