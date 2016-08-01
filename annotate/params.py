@@ -3,4 +3,4 @@ COLS = 3
 BATCH = ROWS * COLS
 POLYGON = False
 VIEWED_AS_DONE = False
-SHOW_CHECK = True
+SHOW_CHECK = False
