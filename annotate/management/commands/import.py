@@ -16,7 +16,14 @@ class Command(BaseCommand):
         #check_and_import(hours, not options['run'], options['check'])
         run = options['run']
         for line in sys.stdin:
-            path, meta = line.strip().split('\t')
+            fs = line.strip().split('\t')
+            if len(fs) == 1:
+                path = fs[0]
+                meta = ''
+            elif len(fs) == 2:
+                path, meta  = fs
+            else:
+                raise Exception("bad line: %s" % line)
             if run:
                 Image.objects.create(path = path, meta = meta)
             else:
