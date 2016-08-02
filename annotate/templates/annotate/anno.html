@@ -69,7 +69,7 @@ Total: {{total}}, Done: {{done}}, Todo: {{todo}}
 {% for row in jobs %}
 <tr>
 {% for col in row %}
-<td>{{col}}<img src="{% url 'image' col %}" key="{{col}}" class="annotatable"/>
+<td>{{col}}<span style="cursor:crosshair"><img src="{% url 'image' col %}" key="{{col}}" class="annotatable"/></span>
 	{% if show_check %}
 	<input type="checkbox" class='done'></input>
 	{% endif %}

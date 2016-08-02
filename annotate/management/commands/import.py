@@ -19,7 +19,7 @@ class Command(BaseCommand):
             fs = line.strip().split('\t')
             if len(fs) == 1:
                 path = fs[0]
-                meta = ''
+                meta = path
             elif len(fs) == 2:
                 path, meta  = fs
             else:

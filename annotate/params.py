@@ -1,5 +1,5 @@
-ROWS = 5
-COLS = 3
+ROWS = 1
+COLS = 1
 BATCH = ROWS * COLS
 POLYGON = False
 VIEWED_AS_DONE = False
