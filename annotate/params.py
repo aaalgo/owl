@@ -1,6 +1,6 @@
 ROWS = 1
 COLS = 1
 BATCH = ROWS * COLS
-POLYGON = False
+SHAPE = 'point'
 VIEWED_AS_DONE = False
 SHOW_CHECK = False

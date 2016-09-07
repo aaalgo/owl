@@ -19,7 +19,7 @@ def signature (image, annotation):
     geo = annotation['shapes'][0]['geometry']
     sig = '%s:%s' % (image.id, json.dumps(geo))
     sig = sig[:250]
-    logging.info(sig)
+    print "SIG:%s" % sig
     return sig
 
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ def anno_base (request, images):
     todo = [x.id for x in images]
     annos = [fix_anno(x.anno) for x in annotations]
     context = {'jobs': list(chunks(todo, params.COLS)),
-               'polygon': params.POLYGON,
+               'shape': params.SHAPE,
                'total': n_total,
                'done': n_done,
                'todo': n_total - n_done,

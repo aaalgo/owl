@@ -3,8 +3,10 @@
 <link type="text/css" rel="stylesheet" href="{% static 'css/annotorious.css' %}" />
 <script type="text/javascript" src="{% static 'jquery-2.2.0.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'annotorious.min.js' %}"></script>
-{% if polygon %}
+{% if shape == "polygon" %}
 <script type="text/javascript" src="{% static 'anno-polygon.min.js' %}"></script>
+{% elif shape == "point" %}
+<script type="text/javascript" src="{% static 'anno-point.min.js' %}"></script>
 {% endif %}
 <script type="text/javascript">
 jQuery.noConflict();
@@ -47,8 +49,10 @@ function update (method, annotation) {
         }
     });
 }
-{% if polygon %}
+{% if shape == "polygon" %}
 anno.addPlugin('PolygonSelector', { activate: true });
+{% elif shape == "point" %}
+anno.addPlugin('PointSelector', { activate: true });
 {% endif %}
 anno.addHandler("onAnnotationCreated", function(annotation) {
     update("create", annotation);
