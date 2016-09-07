@@ -38,6 +38,15 @@ jQuery.ajaxSetup({
     }
 });
 function update (method, annotation) {
+{% if shape == "point" %}
+    var old = annotation;
+    var geom = old.shapes[0].geometry;
+    annotation = {shapes: [{geometry:{x: geom.x, y: geom.y}, type: 'point'}],
+	    	  src: old.src,
+		  context: old.context,
+		  key: old.key,
+		  text: old.text};
+{% endif %}
     jQuery.ajax({
         url:"{% url 'log' %}",
         type:"POST",
