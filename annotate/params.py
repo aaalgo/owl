@@ -1,6 +1,6 @@
 ROWS = 1
 COLS = 1
 BATCH = ROWS * COLS
-SHAPE = 'point'
+SHAPE = 'rect'
 VIEWED_AS_DONE = False
 SHOW_CHECK = False
