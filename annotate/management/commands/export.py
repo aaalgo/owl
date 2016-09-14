@@ -5,7 +5,8 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError, transaction
 from django.contrib.auth.models import User
-from annotate.models import *
+from annotate.utils import fix_transpose
+from annotate import params
 import picpac
 
 class Command(BaseCommand):
@@ -20,7 +21,7 @@ class Command(BaseCommand):
         output = options['output'][0]
         all = {}
         for anno in Annotation.objects.all():
-            shapes = all.setdefault(anno.image, {"shapes":[]})["shapes"].append(json.loads(anno.anno)["shapes"][0])
+            shapes = all.setdefault(anno.image, {"shapes":[]})["shapes"].append(fix_transpose(json.loads(anno.anno)["shapes"][0]))
             pass
         if os.path.exists(output):
             os.remove(output)

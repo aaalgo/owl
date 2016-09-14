@@ -4,3 +4,4 @@ BATCH = ROWS * COLS
 SHAPE = 'rect'
 VIEWED_AS_DONE = False
 SHOW_CHECK = False
+TRANSPOSE = True

@@ -1,7 +1,9 @@
+import os
 import hashlib
 import mimetypes
 import simplejson as json
 import logging
+import subprocess
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
@@ -26,8 +28,13 @@ logger = logging.getLogger(__name__)
 
 def image (request, key):
     image = Image.objects.get(pk = int(key))
-    mime = mimetypes.guess_type(image.path)
-    data = open(image.path, 'r').read()
+    path = image.path
+    if params.TRANSPOSE:
+        path = 'trans/%s.jpg' % hashlib.sha1(image.path).hexdigest()
+        if not os.path.exists(path):
+            subprocess.check_call('convert %s -transpose %s' % (image.path, path), shell=True)
+    mime = mimetypes.guess_type(path)
+    data = open(path, 'r').read()
     return HttpResponse(data, content_type = mime)
 
 def fix_anno (txt):
@@ -76,8 +83,6 @@ def review (request, key):
     return anno_base(request, images)
 
 METHOD_MAP = {key: value for (value, key) in Log.METHOD_CHOICES}
-
-
 
 def log (request):
     data = json.loads(request.body)
