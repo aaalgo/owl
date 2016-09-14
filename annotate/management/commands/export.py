@@ -5,8 +5,8 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError, transaction
 from django.contrib.auth.models import User
+from annotate.models import *
 from annotate.utils import fix_transpose
-from annotate import params
 import picpac
 
 class Command(BaseCommand):

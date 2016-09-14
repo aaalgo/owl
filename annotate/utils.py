@@ -15,11 +15,11 @@ def trans_rect (obj):
 def fix_transpose (obj):
     if params.TRANSPOSE:
         if obj['type'] == 'rect':
-            trans_rect(obj):
+            trans_rect(obj)
         elif obj['type'] == 'polygon':
-            trans_poly(obj):
+            trans_poly(obj)
         elif obj['type'] == 'point':
-            trans_point(obj):
+            trans_point(obj)
         else:
             raise Exception("type %s not supported") % obj['type']
     return obj
