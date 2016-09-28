@@ -1,7 +1,7 @@
 ROWS = 1
 COLS = 1
 BATCH = ROWS * COLS
-SHAPE = 'rect'
-VIEWED_AS_DONE = False
+SHAPE = 'polygon'
+VIEWED_AS_DONE = True
 SHOW_CHECK = False
 TRANSPOSE = False

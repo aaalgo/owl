@@ -12,6 +12,7 @@ import picpac
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('output', nargs=1, help='')
+        parser.add_argument('--all', action='store_true', help='foo help')
         pass
 
     @transaction.atomic
@@ -20,6 +21,10 @@ class Command(BaseCommand):
         #check_and_import(hours, not options['run'], options['check'])
         output = options['output'][0]
         all = {}
+        if options['all']:
+            for image in Image.objects.filter(viewed=True):
+                all[image] =  {"shapes":[]}
+                pass
         for anno in Annotation.objects.all():
             shapes = all.setdefault(anno.image, {"shapes":[]})["shapes"].append(fix_transpose(json.loads(anno.anno)["shapes"][0]))
             pass
