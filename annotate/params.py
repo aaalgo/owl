@@ -1,7 +1,7 @@
 ROWS = 1
 COLS = 1
 BATCH = ROWS * COLS
-SHAPE = 'polygon'
-VIEWED_AS_DONE = True
+SHAPE = 'point'
+VIEWED_AS_DONE = False
 SHOW_CHECK = False
 TRANSPOSE = False
