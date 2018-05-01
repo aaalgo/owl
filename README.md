@@ -1,10 +1,12 @@
 # owl
 image annotation app
 
-### PicPac
+### Python3 and PicPac
+
+We have recently migrated to Python3.
 
 OWL requires picpac.  If you are using Ubuntu 16.04, you can
-[www.aaalgo.com/picpac/binary/picpac.cpython-35m-x86_64-linux-gnu.so](download)
+[download](www.aaalgo.com/picpac/binary/picpac.cpython-35m-x86_64-linux-gnu.so)
 a pre-built picpac binary to the owl directory.
 
 ### Notes
