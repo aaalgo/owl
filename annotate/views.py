@@ -8,20 +8,20 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
-from django.core.urlresolvers import reverse
-from models import *
-import params
+from django.urls import reverse
+from annotate.models import *
+from annotate import params
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
-    for i in xrange(0, len(l), n):
+    for i in range(0, len(l), n):
         yield l[i:i+n]
 
 def signature (image, annotation):
     geo = annotation['shapes'][0]['geometry']
     sig = '%s:%s' % (image.id, json.dumps(geo))
     sig = sig[:250]
-    print "SIG:%s" % sig
+    print("SIG:%s" % sig)
     return sig
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def image (request, key):
         if not os.path.exists(path):
             subprocess.check_call('convert %s -transpose %s' % (image.path, path), shell=True)
     mime = mimetypes.guess_type(path)
-    data = open(path, 'r').read()
+    data = open(path, 'rb').read()
     return HttpResponse(data, content_type = mime)
 
 def fix_anno (txt):
@@ -89,7 +89,7 @@ def log (request):
     method = METHOD_MAP.get(data['method'].upper(), -1)
     assert method >= 0
     anno = data['annotation']
-    print method, anno
+    print(method, anno)
     key = int(anno["key"])
     image = Image.objects.get(pk = key)
     sig = signature(image, anno)

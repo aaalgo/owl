@@ -1,4 +1,4 @@
-import params
+from annotate import params
 
 def trans_rect (obj):
     x = obj['geometry']['x']

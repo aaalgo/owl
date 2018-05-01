@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from annotate.models import *
 from annotate.utils import fix_transpose
 import picpac
+print(picpac.__file__)
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
@@ -30,11 +31,11 @@ class Command(BaseCommand):
             pass
         if os.path.exists(output):
             os.remove(output)
-        pp = picpac.Writer(output)
-        for image, anno in all.iteritems():
-            with open(image.path, 'r') as f:
+        pp = picpac.Writer(output, picpac.OVERWRITE)
+        for image, anno in all.items():
+            with open(image.path, 'rb') as f:
                 buf = f.read()
-            pp.append(buf, json.dumps(anno))
-            print anno
+            pp.append(0, buf, json.dumps(anno).encode('ascii'))
+            print(anno)
         pass
 

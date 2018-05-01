@@ -27,7 +27,7 @@ class Command(BaseCommand):
             if run:
                 Image.objects.create(path = path, meta = meta)
             else:
-                print path, meta
+                print(path, meta)
                 pass
             pass
         pass
