@@ -1,6 +1,12 @@
 # owl
 image annotation app
 
+### PicPac
+
+OWL requires picpac.  If you are using Ubuntu 16.04, you can
+[www.aaalgo.com/picpac/binary/picpac.cpython-35m-x86_64-linux-gnu.so](download)
+a pre-built picpac binary to the owl directory.
+
 ### Notes
 
 1. Before starting, copy params.py.example to params.py under annotate,
