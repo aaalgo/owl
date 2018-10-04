@@ -30,6 +30,8 @@ a pre-built picpac binary to the owl directory.
   3. Go to http://localhost:8005/annotate/ to do annotation.   
   4. After annotation, do:   
      `./manage.py export db`
+     or
+     `./manage.py export --all db`
 
 
 
